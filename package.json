@@ -1,0 +1,20 @@
+{
+  "name": "zamcelco-alert-service",
+  "version": "1.0.0",
+  "main": "alertScript.js",
+  "scripts": {
+    "start": "node alertScript.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.5.0",
+    "node-notifier": "^10.0.1",
+    "puppeteer": "^24.6.1"
+  }
+}
