@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zamcelco Alert Service</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Add Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1><i class="fab fa-facebook"></i> Zamcelco Alert Service</h1>
+        <p class="subtitle">Monitor Facebook posts from Zamcelco Page</p>
+      </header>
+
+      <section class="status-section">
+        <div class="status-card">
+          <h2>Service Status</h2>
+          <div id="status-info">
+            <p>
+              <strong>Status:</strong>
+              <span id="status-message">Not running</span>
+            </p>
+            <p>
+              <strong>Last Check:</strong> <span id="last-check">Never</span>
+            </p>
+            <p>
+              <strong>Monitoring Page:</strong>
+              <span id="page-id">Not set</span>
+            </p>
+            <p>
+              <strong>Check Interval:</strong>
+              <span id="check-interval">Not set</span>
+            </p>
+          </div>
+          <div class="controls">
+            <button id="start-standard" class="btn primary">
+              <i class="fas fa-play"></i> Start with FB API
+            </button>
+            <button id="start-alternative" class="btn secondary">
+              <i class="fas fa-code"></i> Start with Scraper
+            </button>
+            <button id="stop" class="btn danger" disabled>
+              <i class="fas fa-stop"></i> Stop
+            </button>
+            <button id="check-now" class="btn info" disabled>
+              <i class="fas fa-sync"></i> Check Now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="posts-section">
+        <h2>Recent Posts</h2>
+        <div id="notification-area">
+          <!-- Notifications will appear here -->
+        </div>
+        <div id="posts-container">
+          <!-- Posts will be populated here -->
+          <div class="empty-state">
+            <i class="far fa-newspaper fa-3x"></i>
+            <p>No posts to display</p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>&copy; 2025 Zamcelco Alert Service</p>
+      </footer>
+    </div>
+
+    <!-- Socket.io client -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Moment.js for date formatting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+  </body>
+</html>

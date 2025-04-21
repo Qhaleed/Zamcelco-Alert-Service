@@ -1,0 +1,270 @@
+/* styles.css - Styles for Zamcelco Alert Service Web UI */
+
+:root {
+  --primary-color: #1877f2; /* Facebook blue */
+  --secondary-color: #42b72a; /* Facebook green */
+  --danger-color: #e41e3f; /* Red */
+  --info-color: #107db5; /* Light blue */
+  --dark-color: #333333; /* Dark gray */
+  --light-color: #f0f2f5; /* Light gray (Facebook bg) */
+  --text-color: #1c1e21; /* Facebook text color */
+  --card-bg: #ffffff; /* White */
+  --border-color: #dddfe2; /* Facebook border color */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--light-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+header h1 {
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: var(--dark-color);
+  font-size: 1.1rem;
+}
+
+section {
+  margin-bottom: 30px;
+}
+
+.status-card,
+.post-card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.status-card h2,
+.posts-section h2 {
+  margin-bottom: 15px;
+  color: var(--dark-color);
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Button styles */
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn i {
+  font-size: 14px;
+}
+
+.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.primary:hover:not(:disabled) {
+  background-color: #166fe5;
+}
+
+.secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: #36a420;
+}
+
+.danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.danger:hover:not(:disabled) {
+  background-color: #d41b3a;
+}
+
+.info {
+  background-color: var(--info-color);
+  color: white;
+}
+
+.info:hover:not(:disabled) {
+  background-color: #0e6c9e;
+}
+
+/* Post styles */
+#posts-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.post-card {
+  border-left: 4px solid var(--primary-color);
+}
+
+.post-header {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-title {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.post-time {
+  color: #65676b;
+  font-size: 0.9rem;
+}
+
+.post-content {
+  margin: 10px 0;
+  white-space: pre-line;
+  color: var(--text-color);
+}
+
+.post-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.post-action {
+  color: #65676b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+}
+
+.post-action:hover {
+  color: var(--primary-color);
+}
+
+#status-info p {
+  margin-bottom: 8px;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px 0;
+  color: #65676b;
+}
+
+/* Notification area */
+#notification-area {
+  margin-bottom: 15px;
+}
+
+.notification {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background-color: #e7f3ff;
+  border-left: 4px solid var(--primary-color);
+  animation: fadeIn 0.5s, fadeOut 0.5s 4.5s;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.notification.show {
+  opacity: 1;
+  max-height: 200px;
+  transition: opacity 0.5s, max-height 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 200px;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    max-height: 200px;
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+  }
+}
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  color: #65676b;
+  font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
