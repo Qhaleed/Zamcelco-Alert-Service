@@ -15,33 +15,55 @@ const checkNowBtn = document.getElementById('check-now');
 const postsContainer = document.getElementById('posts-container');
 const notificationArea = document.getElementById('notification-area');
 
+// Add loading indicators to buttons
+function setButtonLoading(button, isLoading) {
+    if (isLoading) {
+        const originalText = button.innerHTML;
+        button.dataset.originalText = originalText;
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+        button.disabled = true;
+    } else if (button.dataset.originalText) {
+        button.innerHTML = button.dataset.originalText;
+        button.disabled = false;
+    }
+}
+
 // Event Listeners
 startStandard.addEventListener('click', () => {
+    setButtonLoading(startStandard, true);
     socket.emit('startMonitoring', false);
 });
 
 startAlternative.addEventListener('click', () => {
+    setButtonLoading(startAlternative, true);
     socket.emit('startMonitoring', true);
 });
 
 stopBtn.addEventListener('click', () => {
+    setButtonLoading(stopBtn, true);
     socket.emit('stopMonitoring');
 });
 
 checkNowBtn.addEventListener('click', () => {
+    setButtonLoading(checkNowBtn, true);
     socket.emit('checkNow');
 });
 
 // Handle status updates from the server
 socket.on('statusUpdate', (data) => {
     updateUI(data);
+    // Reset all button loading states
+    setButtonLoading(startStandard, false);
+    setButtonLoading(startAlternative, false);
+    setButtonLoading(stopBtn, false);
+    setButtonLoading(checkNowBtn, false);
 });
 
 // Handle new post notifications
 socket.on('newPost', (data) => {
     showNotification(`New post: ${data.post.header}`);
     updateUI(data.status);
-    addPostToUI(data.post);
+    addPostToUI(data.post, true); // true indicates it's a new post
 });
 
 // Update UI with current service status
@@ -95,8 +117,14 @@ function updateUI(data) {
 
 // Render the list of posts
 function renderPosts(posts) {
-    // Clear the empty state if it exists
-    postsContainer.innerHTML = '';
+    // Check if we only have the empty state
+    const hasOnlyEmptyState = postsContainer.children.length === 1 &&
+        postsContainer.children[0].classList.contains('empty-state');
+
+    if (hasOnlyEmptyState) {
+        // Clear the empty state
+        postsContainer.innerHTML = '';
+    }
 
     // Sort posts by date (newest first)
     const sortedPosts = [...posts].sort((a, b) =>
@@ -110,10 +138,13 @@ function renderPosts(posts) {
 }
 
 // Add a single post to the UI
-function addPostToUI(post) {
+function addPostToUI(post, isNew = false) {
     // Create post element
     const postElement = document.createElement('div');
     postElement.className = 'post-card';
+    if (isNew) {
+        postElement.classList.add('new-post');
+    }
     postElement.setAttribute('data-post-id', post.id);
 
     // Format timestamp if not already formatted
@@ -126,12 +157,12 @@ function addPostToUI(post) {
     postElement.innerHTML = `
         <div class="post-header">
             <div class="post-title">${header}</div>
-            <div class="post-time">${formattedTime}</div>
+            <div class="post-time"><i class="fa-regular fa-clock"></i> ${formattedTime}</div>
         </div>
         <div class="post-content">${post.message || 'No content'}</div>
         <div class="post-actions">
             <div class="post-action">
-                <i class="far fa-newspaper"></i> View on Facebook
+                <i class="fa-brands fa-facebook"></i> View on Facebook
             </div>
         </div>
     `;
@@ -143,7 +174,7 @@ function addPostToUI(post) {
         window.open(`https://www.facebook.com/${pageId}`, '_blank');
     });
 
-    // Add to the top of the container
+    // Add to the container, handling duplicates
     const existingPost = document.querySelector(`[data-post-id="${post.id}"]`);
     if (existingPost) {
         postsContainer.replaceChild(postElement, existingPost);
@@ -154,11 +185,19 @@ function addPostToUI(post) {
             postsContainer.innerHTML = '';
         }
 
-        // Add the new post at the top
+        // Add the new post at the top with a fade-in animation
         if (postsContainer.firstChild) {
             postsContainer.insertBefore(postElement, postsContainer.firstChild);
         } else {
             postsContainer.appendChild(postElement);
+        }
+
+        // Add animation for new posts
+        if (isNew) {
+            postElement.style.animation = 'fadeIn 0.5s ease-out';
+            setTimeout(() => {
+                postElement.style.animation = '';
+            }, 500);
         }
     }
 }
@@ -167,7 +206,9 @@ function addPostToUI(post) {
 function showNotification(message) {
     const notification = document.createElement('div');
     notification.className = 'notification';
-    notification.textContent = message;
+    notification.innerHTML = `
+        <i class="fa-solid fa-bell"></i> ${message}
+    `;
 
     notificationArea.appendChild(notification);
 
@@ -178,10 +219,10 @@ function showNotification(message) {
 
     // Remove after animation
     setTimeout(() => {
-        notification.classList.remove('show');
+        notification.classList.add('hide');
         setTimeout(() => {
             notification.remove();
-        }, 500);
+        }, 300);
     }, 5000);
 }
 
@@ -192,7 +233,58 @@ socket.on('connect', () => {
 
 socket.on('disconnect', () => {
     console.log('Disconnected from server');
-    showNotification('Disconnected from server. Reconnecting...');
+    showNotification('<i class="fa-solid fa-triangle-exclamation"></i> Disconnected from server. Reconnecting...');
+
+    // Disable buttons during disconnect
+    startStandard.disabled = true;
+    startAlternative.disabled = true;
+    stopBtn.disabled = true;
+    checkNowBtn.disabled = true;
+});
+
+// Add element to show connection status
+const connectionStatus = document.createElement('div');
+connectionStatus.className = 'connection-status';
+connectionStatus.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
+document.body.appendChild(connectionStatus);
+
+socket.on('connect', () => {
+    connectionStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Connected';
+    connectionStatus.classList.add('connected');
+
+    setTimeout(() => {
+        connectionStatus.style.opacity = '0';
+    }, 2000);
+});
+
+socket.on('disconnect', () => {
+    connectionStatus.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Disconnected';
+    connectionStatus.classList.remove('connected');
+    connectionStatus.classList.add('disconnected');
+    connectionStatus.style.opacity = '1';
+});
+
+// Add keypress shortcuts
+document.addEventListener('keydown', (event) => {
+    // Ctrl+Alt+S to start with standard API
+    if (event.ctrlKey && event.altKey && event.code === 'KeyS' && !startStandard.disabled) {
+        startStandard.click();
+    }
+
+    // Ctrl+Alt+A to start with alternative method
+    if (event.ctrlKey && event.altKey && event.code === 'KeyA' && !startAlternative.disabled) {
+        startAlternative.click();
+    }
+
+    // Ctrl+Alt+X to stop
+    if (event.ctrlKey && event.altKey && event.code === 'KeyX' && !stopBtn.disabled) {
+        stopBtn.click();
+    }
+
+    // Ctrl+Alt+C to check now
+    if (event.ctrlKey && event.altKey && event.code === 'KeyC' && !checkNowBtn.disabled) {
+        checkNowBtn.click();
+    }
 });
 
 // Initialize by requesting current status

@@ -8,19 +8,19 @@
     <!-- Add Font Awesome for icons -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
   </head>
   <body>
     <div class="container">
       <header>
-        <h1><i class="fab fa-facebook"></i> Zamcelco Alert Service</h1>
-        <p class="subtitle">Monitor Facebook posts from Zamcelco Page</p>
+        <h1><i class="fa-brands fa-facebook"></i> Zamcelco Alert Monitor</h1>
+        <p class="subtitle">Real-time Facebook post monitoring service</p>
       </header>
 
       <section class="status-section">
         <div class="status-card">
-          <h2>Service Status</h2>
+          <h2><i class="fa-solid fa-gauge-high"></i> Service Status</h2>
           <div id="status-info">
             <p>
               <strong>Status:</strong>
@@ -40,37 +40,44 @@
           </div>
           <div class="controls">
             <button id="start-standard" class="btn primary">
-              <i class="fas fa-play"></i> Start with FB API
+              <i class="fa-brands fa-facebook"></i> Start with FB API
             </button>
             <button id="start-alternative" class="btn secondary">
-              <i class="fas fa-code"></i> Start with Scraper
+              <i class="fa-solid fa-code"></i> Start with Scraper
             </button>
             <button id="stop" class="btn danger" disabled>
-              <i class="fas fa-stop"></i> Stop
+              <i class="fa-solid fa-stop"></i> Stop
             </button>
             <button id="check-now" class="btn info" disabled>
-              <i class="fas fa-sync"></i> Check Now
+              <i class="fa-solid fa-rotate"></i> Check Now
             </button>
           </div>
         </div>
       </section>
 
       <section class="posts-section">
-        <h2>Recent Posts</h2>
+        <h2><i class="fa-regular fa-newspaper"></i> Recent Posts</h2>
         <div id="notification-area">
           <!-- Notifications will appear here -->
         </div>
         <div id="posts-container">
           <!-- Posts will be populated here -->
           <div class="empty-state">
-            <i class="far fa-newspaper fa-3x"></i>
-            <p>No posts to display</p>
+            <i class="fa-regular fa-newspaper fa-3x"></i>
+            <p>No posts to display yet</p>
+            <p class="empty-state-hint">
+              Start the monitoring service to see posts
+            </p>
           </div>
         </div>
       </section>
 
       <footer>
-        <p>&copy; 2025 Zamcelco Alert Service</p>
+        <p>
+          Zamcelco Alert Service &copy; 2025 |
+          <i class="fa-solid fa-code"></i> with
+          <i class="fa-regular fa-heart"></i>
+        </p>
       </footer>
     </div>
 
