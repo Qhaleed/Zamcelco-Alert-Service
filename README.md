@@ -147,4 +147,4 @@ For questions or feedback, please open an issue on GitHub.
 
 ---
 
-Made with ❤️ for the Zamboanga City Electric Cooperative community
+Made with ❤️ for the Zamboanga City Community
